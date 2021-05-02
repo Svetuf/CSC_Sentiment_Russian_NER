@@ -1,16 +1,21 @@
 import csv
 import pandas as pd
+import spacy
+import re
 from collections import Counter
 from nltk import ngrams
 from nltk.tokenize import TweetTokenizer
-import spacy
-import re
 
 
 DATA_DIR = '../../Data/Russian Twitter Corpus/'
 
 
 def read_csv_clear(name):
+    '''
+    Читает данные из файла svc, и преобразует их для дальнейшей обработки
+    :param name: имя файла
+    :return: dataframe с подготовленными данными
+    '''
     x = pd.read_csv(f"{DATA_DIR}" + name, sep=';', header=None, engine='c')
     tknzr = TweetTokenizer(strip_handles=True, reduce_len=True)
     for i in range(12):
@@ -31,10 +36,21 @@ def read_csv_clear(name):
 
 
 def create_ngrams_dictionary(bigrams_list):
-    return Counter([str(elem) for lst in bigrams_list for elem in lst])
+    '''
+    Вычисляет словарь из списка n-грамм
+    :param bigrams_list: лист n-грамм
+    :return: Counter n-грамм
+    '''
+    return Counter([elem for lst in bigrams_list for elem in lst])
 
 
 def calculate_ngrams(x, n=2):
+    '''
+    Вычилсяет n-граммы
+    :param x: dataframe с данными
+    :param n: параметр
+    :return: словарь n-грамм
+    '''
     bigrams_list = []
     for i, _ in enumerate(x[3]):
         bigrams_list.append(list(ngrams((y for y in f'^ {x.at[i, 3]} $'.split(' ') if y != ''), n)))
@@ -43,6 +59,12 @@ def calculate_ngrams(x, n=2):
 
 
 def POS_bigrams(x, n=2):
+    '''
+    Вычисляет n-граммы частей речи
+    :param x: dataframe с данными
+    :param n: параметр
+    :return: словарь n-грамм
+    '''
     nlp = spacy.load("ru_core_news_lg")
     bigrams_list = []
     for i, _ in enumerate(x[3]):
