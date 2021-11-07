@@ -1,0 +1,7 @@
+setup_annotator.py
+annotator/__init__.py
+annotator/annotator.py
+annotatorWheel.egg-info/PKG-INFO
+annotatorWheel.egg-info/SOURCES.txt
+annotatorWheel.egg-info/dependency_links.txt
+annotatorWheel.egg-info/top_level.txt
